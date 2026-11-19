@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 01 - Microservices Frontend</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success-bg: #dcfce7;
+            --success-text: #15803d;
+            --info-bg: #e0f2fe;
+            --info-text: #0369a1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .header-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-card h1 {
+            font-size: 24px;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .header-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .architecture-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 18px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-product {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .badge-order {
+            background: var(--info-bg);
+            color: var(--info-text);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            margin-bottom: 16px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .card-header .service-tag {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .button-full {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .result-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 180px;
+            flex: 1;
+        }
+
+        ul#productList {
+            list-style: none;
+        }
+
+        ul#productList li {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: #334155;
+            display: flex;
+            align-items: center;
+        }
+
+        ul#productList li:last-child {
+            border-bottom: none;
+        }
+
+        ul#productList li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -0.5em;
+        }
+
+        pre#result {
+            font-family: Consolas, "Courier New", Courier, monospace;
+            font-size: 13px;
+            color: #0f172a;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1>Frontend – index.html</h1>
+        <p>HTML + JavaScript fetch()</p>
+        <div class="architecture-banner">
+            <span class="badge badge-product">Product Service (Port 8081)</span>
+            <span>⇄ Order Service gọi Product Service qua REST API ⇄</span>
+            <span class="badge badge-order">Order Service (Port 8082)</span>
+        </div>
+    </div>
+
+    <div class="grid">
+        <!-- Khối Product Service -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Danh sách sản phẩm</h2>
+                <div class="service-tag">Product Service (Port 8081)</div>
+            </div>
+            <button class="button-full" onclick="loadProducts()">Tải danh sách sản phẩm</button>
+            <div class="result-box">
+                <ul id="productList"></ul>
+            </div>
+        </div>
+
+        <!-- Khối Order Service -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Tìm sản phẩm thông qua Order Service</h2>
+                <div class="service-tag">Order Service (Port 8082)</div>
+            </div>
+            <div class="form-group">
+                <input type="number" id="productId" placeholder="Nhập ID sản phẩm" min="1">
+                <button onclick="findProduct()">Tìm sản phẩm</button>
+            </div>
+            <div class="result-box">
+                <pre id="result"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadProducts() {
+        try {
+            const response = await fetch("http://localhost:8081/api/products");
+            if (!response.ok) {
+                throw new Error("Không thể tải danh sách sản phẩm");
+            }
+            const products = await response.json();
+            const list = document.getElementById("productList");
+            list.innerHTML = "";
+            if (products.length === 0) {
+                list.textContent = "Chưa có sản phẩm";
+                return;
+            }
+            products.forEach(product => {
+                const li = document.createElement("li");
+                li.textContent = `${product.id} - ${product.name} (${product.price.toLocaleString('vi-VN')} VND)`;
+                list.appendChild(li);
+            });
+        } catch (error) {
+            document.getElementById("productList").textContent = "Lỗi: " + error.message;
+        }
+    }
+
+    async function findProduct() {
+        const id = document.getElementById("productId").value;
+        const result = document.getElementById("result");
+        if (!id || !Number.isInteger(Number(id)) || Number(id) < 1) {
+            result.textContent = "Vui lòng nhập ID hợp lệ";
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8082/api/orders/product/${id}`);
+            if (response.status === 404) {
+                result.textContent = "Không tìm thấy sản phẩm";
+                return;
+            }
+            if (!response.ok) {
+                throw new Error("Không thể lấy thông tin sản phẩm");
+            }
+            const product = await response.json();
+            result.textContent = JSON.stringify(product, null, 2);
+        } catch (error) {
+            result.textContent = "Lỗi: " + error.message;
+        }
+    }
+</script>
+
+</body>
+</html>
