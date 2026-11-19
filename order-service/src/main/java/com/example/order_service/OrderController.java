@@ -1,9 +1,6 @@
 package com.example.order_service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import java.util.*;
 
@@ -20,18 +17,11 @@ public class OrderController {
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<String> getProduct(@PathVariable int id) {
-        try {
-            String product = restClient.get()
-                    .uri("/api/products/{id}", id)
-                    .retrieve()
-                    .body(String.class);
-            return ResponseEntity.ok(product);
-        } catch (HttpClientErrorException.NotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Không tìm thấy sản phẩm\"}");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"" + e.getMessage() + "\"}");
-        }
+    public String getProduct(@PathVariable int id) {
+        return restClient.get()
+                .uri("/api/products/{id}", id)
+                .retrieve()
+                .body(String.class);
     }
 
     @GetMapping

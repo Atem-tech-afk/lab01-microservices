@@ -288,7 +288,7 @@
         }
         try {
             const response = await fetch(`http://localhost:8082/api/orders/product/${id}`);
-            if (response.status === 404) {
+            if (response.status === 404 || response.status === 500) {
                 result.textContent = "Không tìm thấy sản phẩm";
                 return;
             }
